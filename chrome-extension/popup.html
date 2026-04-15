@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LocalDrop</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 320px;
+      font-family: -apple-system, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+    }
+    .header {
+      background: #1a1a1a;
+      color: white;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header h1 { font-size: 16px; font-weight: 600; }
+    .status-bar {
+      background: white;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #eee;
+      font-size: 13px;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #ccc;
+    }
+    .status-dot.online { background: #34c759; }
+    .devices {
+      padding: 12px 16px;
+    }
+    .devices-label {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .device-item {
+      background: white;
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .device-item:hover { border-color: #1a1a1a; }
+    .device-item.selected { border-color: #1a1a1a; }
+    .device-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: #e8f5e9;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .device-name { font-size: 14px; font-weight: 500; }
+    .device-sub { font-size: 11px; color: #888; }
+    .no-device {
+      text-align: center;
+      padding: 24px;
+      color: #aaa;
+      font-size: 13px;
+    }
+    .drop-zone {
+      margin: 0 16px 12px;
+      border: 2px dashed #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #aaa;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .drop-zone.drag-over {
+      border-color: #1a1a1a;
+      background: #f0f0f0;
+      color: #1a1a1a;
+    }
+    .drop-zone input { display: none; }
+    .send-btn {
+      margin: 0 16px 16px;
+      width: calc(100% - 32px);
+      padding: 12px;
+      background: #1a1a1a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      opacity: 0.4;
+      transition: opacity 0.15s;
+    }
+    .send-btn.active { opacity: 1; }
+    .progress {
+      margin: 0 16px 12px;
+      display: none;
+    }
+    .progress-bar {
+      height: 4px;
+      background: #eee;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #1a1a1a;
+      width: 0%;
+      transition: width 0.2s;
+    }
+    .progress-text {
+      font-size: 11px;
+      color: #888;
+      margin-top: 4px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span>📡</span>
+    <h1>LocalDrop</h1>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">デバイスを検索中...</span>
+  </div>
+
+  <div class="devices">
+    <div class="devices-label">近くのデバイス</div>
+    <div id="deviceList">
+      <div class="no-device">デバイスが見つかりません<br>同じWi-Fiに接続してください</div>
+    </div>
+  </div>
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" multiple>
+    <div id="dropText">ファイルをドロップ<br>またはクリックして選択</div>
+  </div>
+
+  <div class="progress" id="progress">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">送信中...</div>
+  </div>
+
+  <button class="send-btn" id="sendBtn" disabled>送信先を選択してください</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
