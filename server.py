@@ -44,6 +44,11 @@ def handle_client(conn, addr):
                 break
             data += chunk
 
+        # 送られてきた名前からフォルダ部分を捨てる(../ で保存先の外に書かれるのを防ぐ)
+        filename = Path(filename.replace('\\', '/')).name
+        if filename in ('', '.', '..'):
+            print("  受信拒否: 不正なファイル名")
+            return
         save_path = SAVE_DIR / filename
         with open(save_path, 'wb') as f:
             f.write(data)

@@ -1,3 +1,5 @@
+> **アーカイブ済み (2026-10)** — 更新は終了しました。同じことは [LocalSend](https://localsend.org) でできます。
+
 # LocalDrop
 
 AirDrop-like file transfer between Pixel (Android) and Mac.
